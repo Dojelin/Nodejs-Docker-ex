@@ -1,2 +1,4 @@
 FROM node
 
+COPY . /app
+
