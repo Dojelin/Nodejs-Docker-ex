@@ -52,3 +52,14 @@ docker build -t goals-react ./frontend
 ```bash
 docker run --name goals-frontend --network goals-net --rm -d -p 3000:3000 -it goals-react
 ```
+
+# Docker compose
+
+Permite lanzar todos los contenedores configurados al mismo tiempo
+
+- Ejecutar docker-compose
+
+  > docker-compose up -d
+
+- Detener y remover el docker-compose
+  > docker-compose down

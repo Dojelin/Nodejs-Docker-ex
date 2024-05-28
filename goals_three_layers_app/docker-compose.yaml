@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  mongodb:
+    image: 'mongo'
+    volumes:
+      - data:/data/db
+    # environment:
+      # - MONGO_INITDB_ROOT_USERNAME=max
+      # - MONGO_INITDB_ROOT_PASSWORD=secret
+    env_file:
+      - ./env/mongo.env
+  backend:
+    build: ./backend
+    # build: 
+    #   context: ./backend
+    #   dockerfile: Dockerfile # en caso de que el dockerfile, tenga otro nombre 
+    ports:
+      - '80:80'
+    volumes:
+      - logs:/app/logs # Persiste los logs creados en el container
+      - ./backend:/app # mount voulume, si se utiliza nodemon, los cambios en el codigo fuente se actualizan en tiempo real
+      - /app/node_modules # volumen anonimo, para que no sobreescriba el directorio al tener el mount volume
+    env_file:
+      - ./env/backend.env
+    depends_on:
+      - mongodb
+ 
+  frontend:
+    build: ./frontend
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend/src:/app/src #bind mount (ver cambio en el codigo fuente)
+    # Las siguientes dos opciones equivalen al -it (Modo iteractivo)
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+
+volumes:
+  data:
+  logs:
